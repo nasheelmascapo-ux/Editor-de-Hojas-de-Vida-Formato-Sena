@@ -279,6 +279,21 @@
             color: var(--sena-dark);
         }
 
+        /* Texto de ayuda de los campos vacíos.
+           Solo se muestra EN PANTALLA: al imprimir o guardar en PDF
+           no existe, así que los campos en blanco salen en blanco. */
+        @media screen {
+            .editable:empty::before,
+            .editable[data-empty="true"]::before {
+                content: attr(data-placeholder);
+                color: #94a3b8;
+                font-style: italic;
+                font-weight: 400;
+                white-space: pre-wrap;
+                pointer-events: none;
+            }
+        }
+
         /* Reglas de Impresión / Guardar PDF */
         @media print {
             body {
@@ -305,6 +320,17 @@
 
             .photo-container {
                 border: 1px solid #cbd5e1;
+            }
+
+            /* Ningún texto de ayuda ("Escribe aquí", ejemplos, foto 3x4)
+               debe salir en el PDF: los campos vacíos se imprimen en blanco. */
+            .editable::before {
+                content: "" !important;
+                display: none !important;
+            }
+
+            .photo-placeholder {
+                display: none !important;
             }
         }
     </style>
@@ -352,32 +378,32 @@
         <div class="grid-2">
             <div class="field-group">
                 <label>Nombres y Apellidos Completos</label>
-                <div class="editable" contenteditable="true">Escribe tu nombre completo aquí</div>
+                <div class="editable" contenteditable="true" data-placeholder="Escribe tu nombre completo aquí"></div>
             </div>
             <div class="field-group">
                 <label>Tipo y N° de Documento</label>
-                <div class="editable" contenteditable="true">C.C. / T.I. N° 000.000.000</div>
+                <div class="editable" contenteditable="true" data-placeholder="C.C. / T.I. N° 000.000.000"></div>
             </div>
         </div>
         <div class="grid-3">
             <div class="field-group">
                 <label>Correo Electrónico</label>
-                <div class="editable" contenteditable="true">correo@misena.edu.co</div>
+                <div class="editable" contenteditable="true" data-placeholder="correo@misena.edu.co"></div>
             </div>
             <div class="field-group">
                 <label>Teléfono / Celular</label>
-                <div class="editable" contenteditable="true">300 000 0000</div>
+                <div class="editable" contenteditable="true" data-placeholder="300 000 0000"></div>
             </div>
             <div class="field-group">
                 <label>Ciudad y Departamento</label>
-                <div class="editable" contenteditable="true">Palmira, Valle del Cauca</div>
+                <div class="editable" contenteditable="true" data-placeholder="Palmira, Valle del Cauca"></div>
             </div>
         </div>
 
         <!-- 2. Perfil Ocupacional / Profesional -->
         <div class="section-title">2. Perfil del Aprendiz</div>
         <div class="field-group">
-            <div class="editable editable-block" contenteditable="true">Aprendiz SENA del programa de formación con alta capacidad de adaptación, sentido de responsabilidad y compromiso ético. Formado en competencias teóricas y técnicas orientadas a la optimización de procesos, trabajo en equipo y resolución de problemas. Disponible para iniciar Etapa Práctica mediante Contrato de Aprendizaje.</div>
+            <div class="editable editable-block" contenteditable="true" data-placeholder="Aprendiz SENA del programa de formación con alta capacidad de adaptación, sentido de responsabilidad y compromiso ético. Formado en competencias teóricas y técnicas orientadas a la optimización de procesos, trabajo en equipo y resolución de problemas. Disponible para iniciar Etapa Práctica mediante Contrato de Aprendizaje."></div>
         </div>
 
         <!-- 3. Formación Académica y SENA -->
@@ -393,16 +419,16 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="editable" contenteditable="true">Tecnólogo / Técnico en...</td>
-                    <td class="editable" contenteditable="true">SENA - Regional Valle / Centro...</td>
-                    <td class="editable" contenteditable="true">Ficha: 0000000</td>
-                    <td class="editable" contenteditable="true">Etapa Lectiva / Listo para Práctica</td>
+                    <td class="editable" contenteditable="true" data-placeholder="Tecnólogo / Técnico en..."></td>
+                    <td class="editable" contenteditable="true" data-placeholder="SENA - Regional Valle / Centro..."></td>
+                    <td class="editable" contenteditable="true" data-placeholder="Ficha: 0000000"></td>
+                    <td class="editable" contenteditable="true" data-placeholder="Etapa Lectiva / Listo para Práctica"></td>
                 </tr>
                 <tr>
-                    <td class="editable" contenteditable="true">Bachiller Académico / Técnico</td>
-                    <td class="editable" contenteditable="true">Institución Educativa...</td>
-                    <td class="editable" contenteditable="true">Año 202X</td>
-                    <td class="editable" contenteditable="true">Graduado</td>
+                    <td class="editable" contenteditable="true" data-placeholder="Bachiller Académico / Técnico"></td>
+                    <td class="editable" contenteditable="true" data-placeholder="Institución Educativa..."></td>
+                    <td class="editable" contenteditable="true" data-placeholder="Año 202X"></td>
+                    <td class="editable" contenteditable="true" data-placeholder="Graduado"></td>
                 </tr>
             </tbody>
         </table>
@@ -420,16 +446,16 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="editable" contenteditable="true">Curso Complementario en...</td>
-                    <td class="editable" contenteditable="true">SENA SofiaPlus</td>
-                    <td class="editable" contenteditable="true">40 Horas</td>
-                    <td class="editable" contenteditable="true">2026</td>
+                    <td class="editable" contenteditable="true" data-placeholder="Curso Complementario en..."></td>
+                    <td class="editable" contenteditable="true" data-placeholder="SENA SofiaPlus"></td>
+                    <td class="editable" contenteditable="true" data-placeholder="40 Horas"></td>
+                    <td class="editable" contenteditable="true" data-placeholder="2026"></td>
                 </tr>
                 <tr>
-                    <td class="editable" contenteditable="true">Herramientas Ofimáticas / Gestión...</td>
-                    <td class="editable" contenteditable="true">SENA SofiaPlus</td>
-                    <td class="editable" contenteditable="true">60 Horas</td>
-                    <td class="editable" contenteditable="true">2026</td>
+                    <td class="editable" contenteditable="true" data-placeholder="Herramientas Ofimáticas / Gestión..."></td>
+                    <td class="editable" contenteditable="true" data-placeholder="SENA SofiaPlus"></td>
+                    <td class="editable" contenteditable="true" data-placeholder="60 Horas"></td>
+                    <td class="editable" contenteditable="true" data-placeholder="2026"></td>
                 </tr>
             </tbody>
         </table>
@@ -439,11 +465,11 @@
         <div class="grid-2">
             <div class="field-group">
                 <label>Referencia 1 (Personal / Familiar)</label>
-                <div class="editable" contenteditable="true">Nombre: Juan Pérez<br>Ocupación: Profesional<br>Teléfono: 310 000 0000</div>
+                <div class="editable" contenteditable="true" data-placeholder="Nombre: Juan Pérez&#10;Ocupación: Profesional&#10;Teléfono: 310 000 0000"></div>
             </div>
             <div class="field-group">
                 <label>Referencia 2 (Académica / Instructora SENA)</label>
-                <div class="editable" contenteditable="true">Nombre: Ing. María Gómez<br>Cargo: Instructora SENA<br>Teléfono: 315 000 0000</div>
+                <div class="editable" contenteditable="true" data-placeholder="Nombre: Ing. María Gómez&#10;Cargo: Instructora SENA&#10;Teléfono: 315 000 0000"></div>
             </div>
         </div>
 
@@ -454,7 +480,7 @@
                     <img id="signature-img" alt="Firma Aprendiz">
                 </div>
                 <p>Firma del Aprendiz SENA</p>
-                <div class="editable" contenteditable="true" style="font-size:0.75rem;">C.C. 000.000.000</div>
+                <div class="editable" contenteditable="true" style="font-size:0.75rem;" data-placeholder="C.C. 000.000.000"></div>
             </div>
             <div style="font-size: 0.75rem; color: #64748b; text-align: right;">
                 Documento generado para postulación a Contrato de Aprendizaje SENA.
@@ -492,6 +518,47 @@
                 reader.readAsDataURL(file);
             }
         });
+
+        /* ------------------------------------------------------------------
+           CAMPOS VACÍOS = ESPACIOS EN BLANCO EN EL PDF
+           El texto de ayuda (data-placeholder) se dibuja con CSS solo en
+           pantalla. Aquí además limpiamos los restos que deja el navegador
+           (<br>, &nbsp;, espacios) para que un campo "vacío" quede vacío
+           de verdad al momento de imprimir.
+        ------------------------------------------------------------------ */
+        (function () {
+            var campos = document.querySelectorAll('.editable');
+
+            function estaVacio(el) {
+                var texto = (el.textContent || '').replace(/\u00a0/g, ' ').trim();
+                return texto === '';
+            }
+
+            function sincronizar(el) {
+                if (estaVacio(el)) {
+                    el.setAttribute('data-empty', 'true');
+                } else {
+                    el.removeAttribute('data-empty');
+                }
+            }
+
+            function normalizar(el) {
+                if (estaVacio(el)) {
+                    el.innerHTML = '';
+                }
+                sincronizar(el);
+            }
+
+            campos.forEach(function (el) {
+                sincronizar(el);
+                el.addEventListener('input', function () { sincronizar(el); });
+                el.addEventListener('blur', function () { normalizar(el); });
+            });
+
+            window.addEventListener('beforeprint', function () {
+                campos.forEach(normalizar);
+            });
+        })();
     </script>
 </body>
 </html>

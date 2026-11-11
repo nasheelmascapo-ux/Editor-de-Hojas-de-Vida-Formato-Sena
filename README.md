@@ -9,6 +9,7 @@ Este proyecto es una herramienta web sencilla e intuitiva diseñada para que apr
 * **Edición Directa (*In-line Editing*):** Haz clic sobre cualquier casilla de texto (datos personales, ficha SENA, perfil, formación, referencias) para escribir tus datos en tiempo real.
 * **Cargador de Foto y Firma:** Sube directamente tu foto tipo documento (3x4 cm) y tu archivo de firma escaneada o digital.
 * **Exportación Limpia a PDF:** Incluye estilos de impresión `@media print` que ocultan los botones y herramientas de control, generando una hoja A4 perfecta al presionar el botón de descargar/imprimir.
+* **Campos vacíos = espacios en blanco:** Los textos de ayuda (*"Escriba aquí"*, ejemplos de relleno, "Foto 3x4 cm") se muestran **solo en pantalla** (dentro de `@media screen`). Al imprimir o guardar el PDF, cualquier campo que no hayas llenado aparece completamente en blanco, sin notas ni textos guía.
 * **Diseño Institucional:** Colores e iconos acordes al formato institucional SENA (Verde SENA `#39a900` y Azul `#00324d`).
 
 ---

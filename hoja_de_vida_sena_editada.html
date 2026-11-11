@@ -320,8 +320,15 @@
       outline: none;
       background: transparent;
     }
-    td.value[data-field="true"]:empty::before {
-      content: "";
+    /* Los textos de ayuda ("Escriba aquí") NUNCA deben salir en el PDF.
+       Se anulan para cualquier campo editable, esté vacío o con restos
+       de <br> o &nbsp; que deja el navegador al borrar lo escrito. */
+    [contenteditable="true"]::before,
+    td.value::before,
+    td.value[data-field="true"]::before,
+    span.underline-fill::before {
+      content: "" !important;
+      display: none !important;
     }
   }
 
@@ -339,11 +346,16 @@
     outline-offset: -2px;
     background: #eaf1ff;
   }
-  td.value[data-field="true"]:empty::before {
-    content: "Escriba aquí";
-    color: #b0b0b0;
-    font-style: italic;
-    font-weight: normal;
+  /* El texto de ayuda existe SOLO en pantalla (media screen),
+     por eso no puede aparecer en el PDF. */
+  @media screen {
+    td.value[data-field="true"]:empty::before,
+    td.value[data-field="true"][data-empty="true"]::before {
+      content: "Escriba aquí";
+      color: #b0b0b0;
+      font-style: italic;
+      font-weight: normal;
+    }
   }
 
   /* ---------- BARRA DE HERRAMIENTAS (solo en pantalla) ---------- */
@@ -391,7 +403,7 @@
     <strong>Modo edición:</strong> Haz clic en cualquier espacio para escribir directamente (incluyendo datos de funcionarios). Puedes subir tu foto de perfil y firmar subiendo la imagen de tu firma.
   </span>
   <button onclick="window.print()">Imprimir / Guardar como PDF</button>
-  <button class="secondary" onclick="if(confirm('¿Borrar todo lo que has escrito en los campos?')){document.querySelectorAll('[data-field=true]').forEach(function(el){el.innerHTML='';});}">Limpiar campos</button>
+  <button class="secondary" onclick="clearFields()">Limpiar campos</button>
 </div>
 
 <!-- ============================================================ -->
@@ -792,6 +804,57 @@
     if (input) { input.value = ''; }
     if (removeBtn) { removeBtn.style.display = 'none'; }
   }
+
+  /* ------------------------------------------------------------------
+     CONTROL DE CAMPOS VACÍOS
+     El texto "Escriba aquí" es solo una ayuda visual en pantalla.
+     Aquí nos aseguramos de que:
+       1. Se muestre únicamente cuando el campo está realmente vacío
+          (aunque el navegador deje <br>, &nbsp; o espacios al borrar).
+       2. Al imprimir / guardar en PDF, esos campos salgan en blanco.
+  ------------------------------------------------------------------ */
+  function isFieldEmpty(el) {
+    if (el.querySelector('img')) return false;
+    var text = (el.textContent || '').replace(/\u00a0/g, ' ').trim();
+    return text === '';
+  }
+
+  function syncField(el) {
+    if (isFieldEmpty(el)) {
+      el.setAttribute('data-empty', 'true');
+    } else {
+      el.removeAttribute('data-empty');
+    }
+  }
+
+  function normalizeField(el) {
+    // Si solo quedaron <br>, &nbsp; o espacios, dejar el campo limpio de verdad
+    if (isFieldEmpty(el)) {
+      el.innerHTML = '';
+    }
+    syncField(el);
+  }
+
+  function clearFields() {
+    if (!confirm('¿Borrar todo lo que has escrito en los campos?')) return;
+    document.querySelectorAll('[data-field="true"]').forEach(function (el) {
+      el.innerHTML = '';
+      syncField(el);
+    });
+  }
+
+  var formularioFields = document.querySelectorAll('[data-field="true"]');
+
+  formularioFields.forEach(function (el) {
+    syncField(el);
+    el.addEventListener('input', function () { syncField(el); });
+    el.addEventListener('blur', function () { normalizeField(el); });
+  });
+
+  // Antes de abrir el cuadro de impresión, limpiar restos invisibles
+  window.addEventListener('beforeprint', function () {
+    formularioFields.forEach(normalizeField);
+  });
 </script>
 
 </body>
